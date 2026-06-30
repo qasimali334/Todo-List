@@ -1,86 +1,116 @@
-# Fullstack Todo List Application
+# TaskFlow - Fullstack Todo List Application
 
-This project has been restructured into a professional separate-directory structure to support separate deployment and development:
-- **`frontend/`**: React + Vite + Tailwind CSS SPA, optimized for deployment on **Vercel**.
-- **`backend/`**: Node.js + Express + MongoDB REST API, optimized for deployment on **Render**.
+TaskFlow is a professional full-stack Todo application designed with clean architecture, modern aesthetics, responsive layout, and robust state management.
+
+The repository is structured as a clean monorepo containing two self-contained packages:
+- **[frontend](file:///d:/Projects/Todo-List/frontend)**: A React SPA powered by Vite, Tailwind CSS (v4), and Lucide icons.
+- **[backend](file:///d:/Projects/Todo-List/backend)**: An Express.js REST API with dual-database support (Supabase PostgreSQL with fallback to local JSON file).
 
 ---
 
-## Folder Structure
+## Repository Structure
 
 ```text
-d:\React\
-├── package.json               # Root monorepo scripts for dev execution
-├── README.md                  # Root instructions (this file)
-├── frontend/                  # React front-end application
-└── backend/                   # Express.js back-end server
+Todo-List/
+├── frontend/                  # React + Vite client application
+│   ├── src/
+│   │   ├── components/        # UI components (auth, layout, todo, ui)
+│   │   ├── context/           # React Context (Auth, Todo)
+│   │   ├── hooks/             # Custom React Hooks (useTodos)
+│   │   └── main.jsx           # App entry point
+│   ├── package.json           # Frontend scripts & dependencies
+│   └── vite.config.js         # Vite bundler configuration
+│
+└── backend/                   # Node.js + Express API server
+    ├── config/                # Configuration (Supabase)
+    ├── data/                  # Local db storage fallback (db.json)
+    ├── middleware/            # Express middleware (auth protection)
+    ├── routes/                # API route endpoints (auth, todos)
+    ├── services/              # Database service mapping layer
+    ├── server.js              # Server entry point
+    └── package.json           # Backend scripts & dependencies
 ```
 
 ---
 
-## Local Setup & Development
+## Features
+
+### Frontend (React SPA)
+- **Sleek Single-Column UI**: Beautiful centered cards with subtle backdrop blur, gradients, hover micro-animations, and full responsiveness.
+- **Theme Support**: Seamless system-wide light & dark mode toggle.
+- **Optimistic Updates**: Task creation, deletion, and status toggling update the UI instantly, rolling back state gracefully on network failure.
+- **Validation**: Inline registration feedback (email regex, password length check, confirm password verification) and standard login checks.
+- **Stats Dashboard**: Live counter cards for Total, Active, Completed, and Overdue tasks.
+- **Search & Filters**: Search-in-page and tab-based status filters (All, Active, Completed), along with category filters (All, Today, High Priority, Completed).
+
+### Backend (Express REST API)
+- **Token-based Authentication**: JWT authentication for user register/login and profile retrieval (`/api/auth/me`).
+- **Database Fallback**: Integrates with **Supabase (PostgreSQL)** if configured via environment variables. If configuration is missing, it transparently falls back to a local JSON file (`backend/data/db.json`) for seamless offline operation.
+- **Google OAuth Integration**: Backend-level verification of Supabase Google access tokens.
+
+---
+
+## Local Setup & Installation
 
 ### 1. Prerequisites
-- [Node.js](https://nodejs.org/) installed.
-- A running MongoDB instance (either local MongoDB Server or a [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) free tier cluster).
+- **Node.js** (v16+) installed.
 
-### 2. Installation
-From the root directory, run the following command to install dependencies for the root, frontend, and backend projects:
-```bash
-npm run install:all
-```
+### 2. Environment Setup
 
-### 3. Environment Setup
-#### Backend
-Create a `.env` file in the `backend/` directory (see `backend/.env.example` as a template):
+#### Backend Environment Configuration
+Create a `.env` file inside the `backend/` directory using `backend/.env.example` as a template:
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key_here
+
+# (Optional) Supabase Database configurations
+SUPABASE_URL=your_supabase_url_here
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
 ```
 
-#### Frontend
-Create a `.env.development` file in the `frontend/` directory:
+#### Frontend Environment Configuration
+Create a `.env.development` file inside the `frontend/` directory:
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
-### 4. Running the Application Locally
-To start both the frontend and backend servers concurrently, run:
+---
+
+## Running the Application
+
+Because the root configuration files were removed to maintain a strict two-folder workspace, the frontend and backend run as independent Node.js processes.
+
+### 1. Start the Backend API Server
+In a terminal window:
 ```bash
+cd backend
+npm install
 npm run dev
 ```
-- Frontend will run on: `http://localhost:5173`
-- Backend API will run on: `http://localhost:5000`
+The backend API server will start on: `http://localhost:5000`
+
+### 2. Start the Frontend Client
+In a separate terminal window:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The React development server will start on: `http://localhost:5173`
 
 ---
 
-## Deployment Guide
+## Deployment
 
-### Backend Deployment on Render
+### 1. Backend Deployment (e.g. on Render)
+- Connect your GitHub repository to Render and create a **Web Service**.
+- Set **Root Directory** to `backend`.
+- **Build Command**: `npm install`
+- **Start Command**: `npm start`
+- Add environment variables (`JWT_SECRET`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` if using Supabase).
 
-1. Sign up/Log in to [Render](https://render.com/).
-2. Create a new **Web Service**.
-3. Connect your GitHub repository.
-4. Set the following details in the creation form:
-   - **Name**: `todo-list-backend` (or similar)
-   - **Root Directory**: `backend` (CRITICAL: tells Render to run from the backend folder)
-   - **Runtime**: `Node`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-5. In the **Environment** section, add the environment variables:
-   - `NODE_ENV` = `production`
-   - `MONGODB_URI` = `your_mongodb_atlas_connection_string`
-   - `JWT_SECRET` = `a_secure_random_string`
-6. Deploy the Web Service and copy the generated service URL (e.g., `https://todo-list-backend.onrender.com`).
-
-### Frontend Deployment on Vercel
-
-1. Sign up/Log in to [Vercel](https://vercel.com/).
-2. Click **Add New** > **Project** and import your GitHub repository.
-3. In the project configuration:
-   - **Root Directory**: `frontend` (CRITICAL: tells Vercel to run from the frontend folder)
-   - **Framework Preset**: `Vite`
-4. Expand **Environment Variables** and add:
-   - `VITE_API_URL` = `https://your-backend-url.onrender.com/api` (the URL of your Render backend web service with `/api` appended)
-5. Click **Deploy**. Vercel will automatically build and deploy your React frontend.
+### 2. Frontend Deployment (e.g. on Vercel)
+- Import your repository on Vercel and create a project.
+- Set **Root Directory** to `frontend`.
+- Set **Framework Preset** to `Vite`.
+- Add the **Environment Variable** `VITE_API_URL` pointing to your deployed backend URL (e.g. `https://your-api.onrender.com/api`).
