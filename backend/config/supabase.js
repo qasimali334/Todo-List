@@ -32,9 +32,11 @@ if (supabaseUrl && supabaseServiceKey) {
     console.log('Supabase client initialized successfully.')
   } catch (error) {
     console.error('Failed to initialize Supabase client:', error.message)
+    console.error('The cleaned supabaseUrl was:', `"${supabaseUrl}"`)
   }
 } else {
   console.log('Supabase configurations are missing. Supabase database service is currently disabled.')
+  console.log('Loaded values -> URL:', `"${supabaseUrl}"`, 'Key:', `"${supabaseServiceKey}"`)
 }
 
 export const isSupabaseConfigured = () => {
