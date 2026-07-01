@@ -3,12 +3,13 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const cleanEnvVar = (val, prefixToRemove) => {
+const cleanEnvVar = (val, varName) => {
   if (!val) return ''
   let cleaned = val.trim()
-  // Remove variable name prefix if mistakenly included
-  if (prefixToRemove && cleaned.startsWith(`${prefixToRemove}=`)) {
-    cleaned = cleaned.substring(prefixToRemove.length + 1)
+  // Remove variable name prefix if mistakenly included (e.g. "VAR_NAME = value" or "VAR_NAME=value")
+  if (varName) {
+    const prefixRegex = new RegExp(`^${varName}\\s*=\\s*`, 'i')
+    cleaned = cleaned.replace(prefixRegex, '')
   }
   // Strip surrounding quotes
   cleaned = cleaned.replace(/^['"]|['"]$/g, '').trim()
