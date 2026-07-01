@@ -2,7 +2,7 @@ import { useContext, useState, useCallback } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { TodoContext } from '../context/TodoContext'
 
-const API_URL = import.meta.env.VITE_API_URL || 'todo-list-production-7c09.up.railway.app'
+const API_URL = import.meta.env.VITE_API_URL || 'http://todo-list-production-7c09.up.railway.app'
 
 export function useTodos() {
   const { user } = useContext(AuthContext)
