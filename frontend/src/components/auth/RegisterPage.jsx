@@ -87,7 +87,7 @@ export function RegisterPage({ theme, toggleTheme, onNavigateToLogin }) {
   const handleGoogleLogin = () => {
     const supabaseUrl = 'https://tldnnmczhihdoyivhrnc.supabase.co'
     const redirectUrl = `${window.location.origin}`
-    window.location.href = `${supabaseUrl}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectUrl)}`
+    window.location.href = `${supabaseUrl}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectUrl)}&prompt=select_account`
   }
 
   // Helper function to return input class name based on validation states

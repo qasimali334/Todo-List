@@ -35,7 +35,7 @@ export function LoginPage({ theme, toggleTheme, onNavigateToRegister }) {
   const handleGoogleLogin = () => {
     const supabaseUrl = 'https://tldnnmczhihdoyivhrnc.supabase.co'
     const redirectUrl = `${window.location.origin}`
-    window.location.href = `${supabaseUrl}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectUrl)}`
+    window.location.href = `${supabaseUrl}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectUrl)}&prompt=select_account`
   }
 
   return (

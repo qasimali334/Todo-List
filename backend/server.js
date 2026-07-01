@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import authRoutes from './routes/auth.js'
 import todoRoutes from './routes/todos.js'
+import { isSupabaseConfigured } from './config/supabase.js'
 
 // Load environment variables
 dotenv.config()
@@ -23,7 +24,10 @@ app.use('/api/todos', todoRoutes)
 
 // Root Endpoint / Health Check
 app.get('/', (req, res) => {
-  res.json({ message: 'TaskFlow API is running smoothly' })
+  res.json({ 
+    message: 'TaskFlow API is running smoothly',
+    database: isSupabaseConfigured() ? 'Supabase' : 'Local JSON Fallback'
+  })
 })
 
 // Error handling middleware
