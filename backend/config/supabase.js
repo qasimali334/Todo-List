@@ -3,8 +3,20 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const supabaseUrl = process.env.SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const cleanEnvVar = (val, prefixToRemove) => {
+  if (!val) return ''
+  let cleaned = val.trim()
+  // Remove variable name prefix if mistakenly included
+  if (prefixToRemove && cleaned.startsWith(`${prefixToRemove}=`)) {
+    cleaned = cleaned.substring(prefixToRemove.length + 1)
+  }
+  // Strip surrounding quotes
+  cleaned = cleaned.replace(/^['"]|['"]$/g, '').trim()
+  return cleaned
+}
+
+const supabaseUrl = cleanEnvVar(process.env.SUPABASE_URL, 'SUPABASE_URL')
+const supabaseServiceKey = cleanEnvVar(process.env.SUPABASE_SERVICE_ROLE_KEY, 'SUPABASE_SERVICE_ROLE_KEY')
 
 let supabase = null
 
