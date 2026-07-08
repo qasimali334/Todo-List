@@ -1,7 +1,9 @@
 node_modules/
 .env
+.db.json
 .env.local
 .DS_Store
+.env.example
 dist/
 build/
 npm-debug.log*

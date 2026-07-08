@@ -26,7 +26,7 @@ app.use('/api/todos', todoRoutes)
 app.get('/', (req, res) => {
   res.json({ 
     message: 'TaskFlow API is running smoothly',
-    database: isSupabaseConfigured() ? 'Supabase' : 'Local JSON Fallback'
+    database: isSupabaseConfigured() ? 'Supabase' : 'Unconfigured'
   })
 })
 
